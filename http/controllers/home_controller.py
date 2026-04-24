@@ -1,5 +1,18 @@
+# =============================================================================
+# КОНСПЕКТ: HomeController — контроллер корневого маршрута "/".
+#
+# starter.py, когда не находит "service" в URL (т.е. пользователь пришёл на
+# "/"), подставляет имя "home" -> грузит этот файл и класс HomeController.
+# Здесь нет REST-обёртки (RestResponse), мы сами формируем HTML.
+#
+# Цель файла — продемонстрировать:
+#   * как из контроллера писать заголовки и тело ответа вручную;
+#   * как работает "нестандартный" HTTP-метод LINK (клиентский JS делает
+#     fetch с method:"LINK", а у нас do_LINK его обрабатывает).
+# =============================================================================
 class HomeController:
     def __init__(self, handler):
+        # handler — это наш RequestHandler из starter.py. Через него пишем ответ.
         self.handler = handler
 
     def do_GET(self):
@@ -7,8 +20,9 @@ class HomeController:
         self.handler.send_response(200)
         self.handler.send_header("Content-Type", "text/html; charset=utf-8")
         self.handler.end_headers()
-        
-        # Контент
+
+        # Контент — простой HTML с кнопкой и inline-скриптом,
+        # который демонстрирует нестандартный метод LINK.
         html = """
         <h1>HTTP Server Working</h1>
         <img src="/img/Python.png" alt="logo" width="150" />
@@ -26,6 +40,9 @@ class HomeController:
         self.handler.wfile.write(html.encode('utf-8'))
 
     def do_LINK(self):
+        # Обработчик нестандартного HTTP-метода LINK.
+        # В starter.py через do_<METHOD> он вызывается автоматически —
+        # благодаря единому диспетчеру по имени метода.
         self.handler.send_response(200)
         self.handler.send_header("Content-Type", "text/plain; charset=utf-8")
         self.handler.end_headers()

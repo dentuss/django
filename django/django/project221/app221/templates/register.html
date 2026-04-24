@@ -1,3 +1,21 @@
+{# =============================================================================
+   КОНСПЕКТ: register.html — шаблон формы регистрации.
+
+   ДЗ: Параметри запитів. Форми — форма с разными типами полей.
+   ДЗ: Валідація форм — отображение ошибок со стилизацией (is-invalid,
+       invalid-feedback, подсветка "зелёным" is-valid при успехе).
+   ДЗ: Моделі — flash-сообщение после успешной регистрации (выводится в
+       layout.html из messages, см. views.py:register).
+
+   Как устроено:
+     * Форма создаётся в forms.py (RegistrationForm).
+     * view register() передаёт её сюда в context под ключом `form`.
+     * {% for field in form %} перебирает все поля формы.
+     * Для каждого поля выбираем нужный HTML-шаблон в зависимости от типа
+       виджета (radio / checkbox / обычный input).
+     * Под полем выводятся ошибки валидации (field.errors).
+     * {% csrf_token %} — обязательная защита от CSRF-атак при POST-формах в Django.
+============================================================================= #}
 {% extends "layout.html" %}
 
 {% block title %}Реєстрація{% endblock %}
@@ -10,10 +28,15 @@
             <p class="text-muted text-center small">Створіть свій акаунт</p>
             <hr>
 
+            {# novalidate отключает встроенную валидацию браузера —
+               мы хотим, чтобы все ошибки обработал Django/наш clean-код. #}
             <form method="post" novalidate>
+                {# CSRF-токен. Без него Django отвергнет POST с 403. #}
                 {% csrf_token %}
 
                 {# Вивід загальних помилок форми (наприклад, якщо паролі не збігаються) #}
+                {# Отличие non_field_errors от field.errors — первая группа
+                   относится ко всей форме (например, ошибки из clean()). #}
                 {% if form.non_field_errors %}
                 <div class="alert alert-danger">
                     {% for error in form.non_field_errors %}
@@ -22,10 +45,12 @@
                 </div>
                 {% endif %}
 
+                {# Перебираем поля формы (username, password, confirm_password, age) #}
                 {% for field in form %}
                 <div class="mb-3">
 
                     {# 1. Обробка RADIO кнопок #}
+                    {# Условная ветка на случай, если появится форма с radio. #}
                     {% if field.field.widget.input_type == "radio" %}
                     <label class="form-label d-block fw-bold mb-2">{{ field.label }}</label>
                     {% for radio in field %}
@@ -41,6 +66,8 @@
                     {% endif %}
 
                     {# 2. Обробка CHECKBOX #}
+                    {# Ветка для будущих BooleanField. Checkbox в Bootstrap
+                       обычно кладут в <div class="form-check">. #}
                     {% elif field.field.widget.input_type == "checkbox" %}
                     <div class="form-check">
                         {{ field }}
@@ -57,18 +84,22 @@
                     {% else %}
                     <label class="form-label fw-bold" for="{{ field.id_for_label }}">{{ field.label }}</label>
 
-                    {# Додаємо клас is-invalid динамічно через скрипт або перевірку #}
+                    {# Рендер самого <input> с атрибутами из forms.py
+                       (class="form-control", placeholder, input type). #}
                     {{ field }}
 
+                    {# --- ДЗ: Валідація форм — отображение ошибок с стилизацией --- #}
                     {% if field.errors %}
                     <div class="invalid-feedback d-block">
                         {{ field.errors.0 }}
                     </div>
+                    {# Inline-скрипт добавляет класс Bootstrap "is-invalid",
+                       чтобы рамка поля стала красной. #}
                     <script>
                         document.getElementById('{{ field.id_for_label }}').classList.add('is-invalid');
                     </script>
                     {% else %}
-                    {# Додаємо клас is-valid, якщо форма була відправлена і помилок немає #}
+                    {# Якщо форма була відправлена і помилок немає — подсвечиваем зелёным. #}
                     {% if form.is_bound %}
                     <script>
                         document.getElementById('{{ field.id_for_label }}').classList.add('is-valid');
@@ -77,7 +108,7 @@
                     {% endif %}
                     {% endif %}
 
-                    {# Допоміжний текст під полем #}
+                    {# Допоміжний текст під полем (help_text в forms.py). #}
                     {% if field.help_text %}
                     <div class="form-text text-muted small">{{ field.help_text }}</div>
                     {% endif %}
