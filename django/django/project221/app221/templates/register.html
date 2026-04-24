@@ -1,0 +1,97 @@
+{% extends "layout.html" %}
+
+{% block title %}Реєстрація{% endblock %}
+
+{% block render_body %}
+<div class="container mt-5" style="max-width: 550px;">
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+            <h1 class="display-6 text-center mb-4">Реєстрація</h1>
+            <p class="text-muted text-center small">Створіть свій акаунт</p>
+            <hr>
+
+            <form method="post" novalidate>
+                {% csrf_token %}
+
+                {# Вивід загальних помилок форми (наприклад, якщо паролі не збігаються) #}
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.non_field_errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% for field in form %}
+                <div class="mb-3">
+
+                    {# 1. Обробка RADIO кнопок #}
+                    {% if field.field.widget.input_type == "radio" %}
+                    <label class="form-label d-block fw-bold mb-2">{{ field.label }}</label>
+                    {% for radio in field %}
+                    <div class="form-check form-check-inline">
+                        {{ radio.tag }}
+                        <label class="form-check-label" for="{{ radio.id_for_label }}">
+                            {{ radio.choice_label }}
+                        </label>
+                    </div>
+                    {% endfor %}
+                    {% if field.errors %}
+                    <div class="text-danger small d-block mt-1">{{ field.errors.0 }}</div>
+                    {% endif %}
+
+                    {# 2. Обробка CHECKBOX #}
+                    {% elif field.field.widget.input_type == "checkbox" %}
+                    <div class="form-check">
+                        {{ field }}
+                        <label class="form-check-label {% if field.errors %}text-danger{% endif %}"
+                            for="{{ field.id_for_label }}">
+                            {{ field.label }}
+                        </label>
+                    </div>
+                    {% if field.errors %}
+                    <div class="invalid-feedback d-block">{{ field.errors.0 }}</div>
+                    {% endif %}
+
+                    {# 3. Обробка стандартних полів (текст, пароль, дата, select) #}
+                    {% else %}
+                    <label class="form-label fw-bold" for="{{ field.id_for_label }}">{{ field.label }}</label>
+
+                    {# Додаємо клас is-invalid динамічно через скрипт або перевірку #}
+                    {{ field }}
+
+                    {% if field.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ field.errors.0 }}
+                    </div>
+                    <script>
+                        document.getElementById('{{ field.id_for_label }}').classList.add('is-invalid');
+                    </script>
+                    {% else %}
+                    {# Додаємо клас is-valid, якщо форма була відправлена і помилок немає #}
+                    {% if form.is_bound %}
+                    <script>
+                        document.getElementById('{{ field.id_for_label }}').classList.add('is-valid');
+                    </script>
+                    {% endif %}
+                    {% endif %}
+                    {% endif %}
+
+                    {# Допоміжний текст під полем #}
+                    {% if field.help_text %}
+                    <div class="form-text text-muted small">{{ field.help_text }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+                <div class="d-grid gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg shadow-sm">
+                        Зареєструватися
+                    </button>
+                    <a href="/" class="btn btn-link btn-sm text-decoration-none text-muted">Вже є акаунт? Увійти</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
