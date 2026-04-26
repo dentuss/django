@@ -1,0 +1,46 @@
+﻿# Виртуальное окружение (venv внутри проекта)
+Include/
+Lib/
+Scripts/
+pyvenv.cfg
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+.Python
+build/
+dist/
+
+# Django
+*.log
+*.pot
+*.sqlite3
+*.sqlite3-journal
+db.sqlite3
+local_settings.py
+media/
+staticfiles/
+/static/
+
+# PyCharm / JetBrains
+.idea/
+*.iml
+
+# VSCode
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Окружения и секреты
+.env
+.env.*
+!.env.example

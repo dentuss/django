@@ -1,0 +1,21 @@
+<!--
+   КОНСПЕКТ: index.html — главная страница
+   - % extends "layout.html" % — наследует общий макет
+     (navbar, footer, блок для flash-сообщений)
+     Внутрь подставляются блоки title и render_body
+   - { x } и { str } — переменные из контекста view index() (views.py)
+
+   ДЗ: Вступ до Django — требовалось разместить ссылку на страницу /intro
+   на главной. Ссылка <a href="intro"> ниже — как раз это выполняет
+-->
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+
+{% block render_body %}
+    <h1>Знайомство з Django!</h1>
+    &#x7B;&#x7B;x&#x7D;&#x7D; = {{x}}, &#x7B;&#x7B;str&#x7D;&#x7D; = {{str}}
+
+    <hr>
+    <!-- ДЗ: Вступ до Django — ссылка на intro со скриншотами в django/RESULT/ -->
+    <a href="intro" class="text-decoration-underline text-info">Intro page</a>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}Exam{% endblock %}
+
+{% block header_content %}
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+     Изменение: страница-потомок переопределяет header block
+     Зачем: показать, что header layout можно кастомизировать -->
+<a class="navbar-brand" href="/exam/">Exam Module</a>
+<div class="navbar-nav">
+    <a class="nav-link" href="/exam/">Exam Home</a>
+    <a class="nav-link" href="/exam/score100/">Form 100</a>
+    <a class="nav-link" href="/exam/grade4/">Form 4-scale</a>
+    <a class="nav-link" href="/exam/discipline/">Discipline</a>
+</div>
+{% endblock %}
+
+{% block render_body %}
+<h1>Exam page</h1>
+<p>Нова сторінка Django доступна за адресою <code>/exam/</code>.</p>
+{% endblock %}
+
+{% block footer_content %}
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+     Изменение: страница-потомок переопределяет footer block
+     Зачем: показать, что footer layout можно кастомизировать-->
+<span class="text-muted">© 2026 Exam module footer</span>
+{% endblock %}

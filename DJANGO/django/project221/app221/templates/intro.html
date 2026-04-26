@@ -1,0 +1,68 @@
+<!--
+   ДЗ: Вступ до Django
+   Задание: Реалізувати окрему сторінку Intro. Вивести дані про встановлення
+            та налаштування Django. Вивести час завантаження сторінки вида
+            "Сторінка завантажена о 14:43 13.03.2026". На головній сторінці
+            розмістити посилання на Intro. Додати скріншоти
+
+   Что сделано в этом шаблоне:
+     - 4 шага установки: venv -> activate -> pip install -> startproject
+     - Внизу — время загрузки страницы через переменную { load_time }
+       (её формирует view intro() в views.py: datetime.now().strftime)
+
+   Шаблон НЕ наследует layout.html — это автономная страница
+-->
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intro - Налаштування Django</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        .timestamp {
+            color: #555;
+            font-style: italic;
+            border-top: 1px solid #ccc;
+            margin-top: 20px;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Встановлення та налаштування Django</h1>
+
+    ### Крок 1: Створення віртуального оточення
+    <p>Використовуйте команду: <code>python -m venv venv</code></p>
+
+    ### Крок 2: Активація
+    <p>Для Windows (PowerShell): <code>.\venv\Scripts\Activate.ps1</code></p>
+
+    ### Крок 3: Встановлення фреймворка
+    <p>Виконайте команду: <code>pip install django</code></p>
+
+    ### Крок 4: Створення проекту
+    <p><code>django-admin startproject project221</code></p>
+
+    <!--ДЗ: вывод времени загрузки страницы -->
+    <div class="timestamp">
+        <p>Сторінка завантажена о {{load_time}}</p>
+    </div>
+</body>
+
+</html>

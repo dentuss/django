@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block title %}Score100{% endblock %}
+{% block render_body %}
+<h2>Форма: прізвище + оцінка (100-бальна)</h2>
+<form method="post">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+    </table>
+    <button type="submit">Надіслати</button>
+</form>
+{% endblock %}

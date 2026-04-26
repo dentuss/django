@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block title %}Discipline{% endblock %}
+{% block render_body %}
+<h2>Форма: дисципліна + дата екзамену</h2>
+<form method="post">
+    {% csrf_token %}
+    <ul>
+        {{ form.as_ul }}
+    </ul>
+    <button type="submit">Надіслати</button>
+</form>
+{% endblock %}
